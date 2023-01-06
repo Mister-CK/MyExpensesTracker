@@ -1,11 +1,22 @@
-import { View, Text, StyleSheet } from "react-native-web";
+import { View, Text, StyleSheet } from "react-native";
 
 const ManageExpensesScreen = () => {
   return (
-    <View>
-      <Text>Hello ManageExpensesScreen</Text>
+    <View style={styles.rootContainer}>
+      <Text style={styles.text}>Hello MangeExpensesScreen</Text>
     </View>
   );
 };
 export default ManageExpensesScreen;
-const syles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  text: {
+    fontWeight: "bold",
+    fontSize: 24,
+    color: "white",
+  },
+});
