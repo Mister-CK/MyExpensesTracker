@@ -2,12 +2,18 @@ import { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import InputItem from "./InputItem";
 import CustomButton from "../../components/UI/CustomButton.js";
-
-const ExpenseForm = ({ onCancel, onSubmit, submitButtonLabel }) => {
+const ExpenseForm = ({
+  onCancel,
+  onSubmit,
+  submitButtonLabel,
+  defaultExpenseValues,
+}) => {
   const [inputValues, setinputValues] = useState({
-    amount: "",
-    date: "",
-    description: "",
+    amount: defaultExpenseValues ? defaultExpenseValues.amount.toString() : "",
+    date: defaultExpenseValues
+      ? defaultExpenseValues.date.toISOString().slice(0, 10)
+      : "",
+    description: defaultExpenseValues ? defaultExpenseValues.description : "",
   });
   const inputChangedHandler = (inputIdentifier, enteredText) => {
     setinputValues((currentInputValues) => {
