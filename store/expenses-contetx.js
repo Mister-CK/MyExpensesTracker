@@ -1,80 +1,17 @@
 import { createContext, useReducer, useState } from "react";
 
-const DUMMY_EXPENSES = [
-  {
-    id: "e1",
-    description: "dummyText1",
-    amount: 59.99,
-    date: new Date("2023-01-04"),
-  },
-  {
-    id: "e2",
-    description: "dummyText2",
-    amount: 12.0,
-    date: new Date("2023-01-03"),
-  },
-  {
-    id: "e3",
-    description: "dummyText3",
-    amount: 159.99,
-    date: new Date("2023-01-02"),
-  },
-  {
-    id: "e4",
-    description: "dummyText4",
-    amount: 20,
-    date: new Date("2023-01-02"),
-  },
-  {
-    id: "e5",
-    description: "dummyText5",
-    amount: 99.99,
-    date: new Date("2022-12-21"),
-  },
-  {
-    id: "e6",
-    description: "dummyText1",
-    amount: 59.99,
-    date: new Date("2023-01-04"),
-  },
-  {
-    id: "e7",
-    description: "dummyText2",
-    amount: 12.0,
-    date: new Date("2023-01-03"),
-  },
-  {
-    id: "e8",
-    description: "dummyText3",
-    amount: 159.99,
-    date: new Date("2023-01-02"),
-  },
-  {
-    id: "e9",
-    description: "dummyText4",
-    amount: 20,
-    date: new Date("2023-01-02"),
-  },
-  {
-    id: "e10",
-    description: "dummyText5",
-    amount: 99.99,
-    date: new Date("2022-12-21"),
-  },
-];
-
 export const ExpensesContext = createContext({
   expenses: [],
   addExpense: ({ description, amount, date }) => {},
   deleteExpense: (id) => {},
+  setExpenses: (expenses) => {},
   updateExpense: (id, { description, amount, date }) => {},
 });
 
 const expensesReducer = (state, action) => {
   switch (action.type) {
     case "ADD":
-      const id = new Date().toString + Math.random().toString();
-      return [{ ...action.payload, id }, ...state];
+      return [action.payload, ...state];
     case "UPDATE":
       const updatableExpenseIndex = state.findIndex(
         (expense) => expense.id === action.payload.id
@@ -89,13 +26,16 @@ const expensesReducer = (state, action) => {
       return updatedExpenses;
     case "DELETE":
       return state.filter((expense) => expense.id !== action.payload);
+    case "SET":
+      const inverted = action.payload.reverse();
+      return inverted;
     default:
       return state;
   }
 };
 
 const ExpensesContextProvider = ({ children }) => {
-  const [expensesState, dispatch] = useReducer(expensesReducer, DUMMY_EXPENSES);
+  const [expensesState, dispatch] = useReducer(expensesReducer, []);
 
   const addExpense = (expenseData) => {
     dispatch({ type: "ADD", payload: expenseData });
@@ -106,10 +46,14 @@ const ExpensesContextProvider = ({ children }) => {
   const updateExpense = (id, expenseData) => {
     dispatch({ type: "UPDATE", payload: { id: id, expenseData: expenseData } });
   };
+  const setExpenses = (expenses) => {
+    dispatch({ type: "SET", payload: expenses });
+  };
   const value = {
     expenses: expensesState,
     addExpense: addExpense,
     updateExpense: updateExpense,
+    setExpenses: setExpenses,
     deleteExpense: deleteExpense,
   };
   return (

@@ -61,7 +61,6 @@ const ExpenseForm = ({
       });
       return;
     }
-    console.log(expenseData);
     onSubmit(expenseData);
   };
   const formIsInvalid =
